@@ -1,0 +1,124 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Libro {
+    private String titulo;
+    private String autor;
+    private String categoria;
+    private boolean disponible;
+
+    public Libro(String titulo, String autor, String categoria, boolean disponible) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.categoria = categoria;
+        this.disponible = disponible;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+}
+
+class ControladorLibreria {
+    private List<Libro> libros;
+
+    public ControladorLibreria() {
+        libros = new ArrayList<>();
+
+        // Agregar algunos libros de ejemplo
+        libros.add(new Libro("El Gran Gatsby", "F. Scott Fitzgerald", "Ficción", true));
+        libros.add(new Libro("1984", "George Orwell", "Ciencia ficción", true));
+        libros.add(new Libro("Cien años de soledad", "Gabriel García Márquez", "Realismo mágico", false));
+    }
+
+    public List<Libro> buscarLibroPorTitulo(String titulo) {
+        List<Libro> resultados = new ArrayList<>();
+
+        for (Libro libro : libros) {
+            if (libro.getTitulo().equalsIgnoreCase(titulo)) {
+                resultados.add(libro);
+            }
+        }
+
+        return resultados;
+    }
+
+    public void reservarLibro(Libro libro) {
+        if (libro.isDisponible()) {
+            libro.setDisponible(false);
+            System.out.println("Libro reservado exitosamente.");
+        } else {
+            System.out.println("El libro no está disponible para reserva.");
+        }
+    }
+
+    public void comprarLibro(Libro libro) {
+        if (libro.isDisponible()) {
+            libro.setDisponible(false);
+            System.out.println("Libro comprado exitosamente.");
+        } else {
+            System.out.println("El libro no está disponible para compra.");
+        }
+    }
+
+    public void devolverLibro(Libro libro) {
+        if (!libro.isDisponible()) {
+            libro.setDisponible(true);
+            System.out.println("Libro devuelto exitosamente.");
+        } else {
+            System.out.println("El libro no se puede devolver, ya está disponible.");
+        }
+    }
+}
+
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        ControladorLibreria controlador = new ControladorLibreria();
+        Scanner scanner = new Scanner(System.in);
+
+        // Ejemplo de interacción para buscar un libro y realizar una reserva
+        System.out.print("Ingrese el título del libro a buscar: ");
+        String tituloBusqueda = scanner.nextLine();
+
+        List<Libro> resultados = controlador.buscarLibroPorTitulo(tituloBusqueda);
+
+        if (resultados.isEmpty()) {
+            System.out.println("No se encontraron libros con ese título.");
+        } else {
+            System.out.println("Resultados de la búsqueda:");
+            for (Libro libro : resultados) {
+                System.out.println("- Título: " + libro.getTitulo());
+                System.out.println("  Autor: " + libro.getAutor());
+                System.out.println("  Categoría: " + libro.getCategoria());
+                System.out.println("  Disponible: " + (libro.isDisponible() ? "Sí" : "No"));
+
+                System.out.print("¿Desea reservar este libro? (S/N): ");
+                String opcionReserva = scanner.nextLine();
+
+                if (opcionReserva.equalsIgnoreCase("S")) {
+                    controlador.reservarLibro(libro);
+                }
+            }
+        }
+    }
+}
